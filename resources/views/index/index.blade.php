@@ -28,6 +28,7 @@
 @section('js')
 <script type="text/javascript">
 	$('#idButtonLogin').click(function() {
+		funcShowToastr("lpw");
 		var formData = {
 			_token: "{{ Session::token() }}",
 			username: $('#idInputUsername').val(),
@@ -44,11 +45,13 @@
 				if (data == "SUCCESS") {
 					location.reload();
 				} else {
-					toastr.error("Invalid Username / Password");
+					funcShowToastr("error", "Invalid Username / Password", "Error");
 				}
 			},
 			error: function(data) {
 				console.log(data);
+
+				funcShowToastr("aueo");
 			},
 			complete: function(data) {
 				//console.log(data);

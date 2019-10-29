@@ -8,5 +8,20 @@
 <script type="text/javascript" src="{{ URL::asset('library/js/datatables.min.js') }}"></script>
 
 <script type="text/javascript">
-	
+	function funcShowToastr(type, description, title, options) {
+		toastr.remove();
+		if (type == "success") {
+			toastr.success(description, title, options);
+		} else if (type == "info") {
+			toastr.info(description, title, options);
+		} else if (type == "error") {
+			toastr.error(description, title, options);
+		} else if (type == "aueo") {
+			toastr.error("An Unexpected Error Occured!", "Error");
+		} else if (type == "lpw") {
+			toastr.info("Please Wait", "Loading", {
+				timeOut: 0,
+			});
+		}
+	}
 </script>

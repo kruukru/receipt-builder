@@ -22,7 +22,7 @@
 				</thead>
 				<tbody>
 					@foreach ($accounts as $account)
-					<tr>
+					<tr data-thisid="{{$account->id}}">
 						<td>{{$account->name}}</td>
 						<td>{{$account->username}}</td>
 						<td>
@@ -35,9 +35,9 @@
 							@endif
 						</td>
 						<td class="text-center">
-							<button type="button" class="btn btn-primary">Update</button>
-							@if ($account->type != 0)
-								<button type="button" class="btn btn-danger">Remove</button>
+							<button type="button" class="btn btn-primary" onclick="funcOpenAccountModal('update', this);">Update</button>
+							@if ($account->id != 1)
+								<button type="button" class="btn btn-danger" id="idButtonRemove">Remove</button>
 							@endif
 						</td>
 					</tr>
@@ -46,7 +46,7 @@
 			</table>
 		</div>
 	</div>
-	<div class="modal fade" tabindex="-1" role="dialog" id="idDivModalAccount" data-thisaction="">
+	<div class="modal fade" tabindex="-1" role="dialog" id="idDivModalAccount" data-thisaction="" data-thisid="">
 	  	<div class="modal-dialog modal-dialog-centered" role="document">
 	    	<div class="modal-content">
 	      		<div class="modal-header">
@@ -92,20 +92,64 @@
 		$(document).ready(function() {
 			$('#idTableAccount').DataTable();
 		});
+		$('#idDivModalAccount').on('hidden.bs.modal', function() {
+			$('#idInputName').val("");
+			$('#idInputUsername').val("");
+			$('#idInputPassword').val("").prop('disabled', false);
+			$('#idInputPassword2').val("").prop('disabled', false);
+			$('#idSelectType').val(0).prop('disabled', false);
+		});
 
-		function funcOpenAccountModal(type) {
+		function funcOpenAccountModal(type, thisElement) {
 			if (type == "new") {
 				$('#idDivModalAccount .modal-title').text("New Account");
 				$('#idDivModalAccount').attr('data-thisaction', "new");
+			} else if (type == "update") {
+				funcShowToastr("lpw");
+				var id = $(thisElement).closest('tr').attr('data-thisid');
+				if (id == 1) {
+					$('#idInputPassword').prop('disabled', true);
+					$('#idInputPassword2').prop('disabled', true);
+					$('#idSelectType').prop('disabled', true);
+				}
+
+				$.ajax({
+					type: "GET",
+					url: "{{ route('retrieve-account-one') }}",
+					data: { id: id, },
+					dataType: "JSON",
+					success: function(data) {
+						//console.log(data);
+
+						$('#idInputName').val(data.name);
+						$('#idInputUsername').val(data.username);
+						$('#idInputPassword').val("default");
+						$('#idInputPassword2').val("default");
+						$('#idSelectType').val(data.type);
+
+						toastr.remove();
+					},
+					error: function(data) {
+						console.log(data);
+
+						funcShowToastr("aueo");
+					},
+				})
+
+				$('#idDivModalAccount .modal-title').text("Update Account");
+				$('#idDivModalAccount').attr('data-thisid', id);
+				$('#idDivModalAccount').attr('data-thisaction', "update");
 			}
 
 			$('#idDivModalAccount').modal('show');
 		}
 		function funcSaveAccountModal() {
+			funcShowToastr("lpw");
 			var type = $('#idDivModalAccount').attr('data-thisaction');
+			var id = $('#idDivModalAccount').attr('data-thisid');
 
 			if ($('#idInputPassword').val() != $('#idInputPassword2').val()) {
-				toastr.error("Password Mismatch");
+				funcShowToastr("error", "Password Mismatch", "Error");
 				return;
 			}
 
@@ -118,23 +162,35 @@
 					password: $('#idInputPassword').val(),
 					type: $('#idSelectType').val(),
 				};
-
-				$.ajax({
-					type: "POST",
-					url: "{{ route('admin-account-save') }}",
-					data: formData,
-					dataType: "JSON",
-					success: function(data) {
-						console.log(data);
-					},
-					error: function(data) {
-						console.log(data);
-					},
-					complete: function(data) {
-						//console.log(data);
-					},
-				});
+			} else if (type == "update") {
+				var formData = {
+					_token: "{{ Session::token() }}",
+					id: id,
+					action: "update",
+					name: $('#idInputName').val(),
+					username: $('#idInputUsername').val(),
+					password: $('#idInputPassword').val(),
+					type: $('#idSelectType').val(),
+				};
 			}
+
+			$.ajax({
+				type: "POST",
+				url: "{{ route('admin-account-save') }}",
+				data: formData,
+				dataType: "JSON",
+				success: function(data) {
+					//console.log(data);
+
+					funcShowToastr("success", "Account Saved!", "Success");
+					$('#idDivModalAccount').modal('hide');
+				},
+				error: function(data) {
+					console.log(data);
+
+					funcShowToastr("aueo");
+				},
+			});
 		}
 	</script>
 @endsection

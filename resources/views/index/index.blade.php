@@ -18,15 +18,27 @@
 					</div>
 				</div>
 				<div class="card-footer text-right">
+					<button type="button" class="btn btn-secondary" onclick="funcPrint();">Print</button>
 					<button type="button" class="btn btn-secondary" id="idButtonClear">Clear</button>
 					<button type="button" class="btn btn-success" id="idButtonLogin">Login</button>
 				</div>
 			</div>
 		</div>
 	</div>
+	<div id="idDivTestPrint">
+		<!--  -->
+	</div>
 @endsection
 @section('js')
 <script type="text/javascript">
+	function funcPrint(){
+        var S = "#Intent;scheme=rawbt;";
+        var P =  "package=ru.a402d.rawbtprinter;end;";
+        var textEncoded = encodeURI($('#idDivTestPrint').text());
+        window.location.href="intent:"+textEncoded+S+P;
+    }
+
+
 	$('#idButtonLogin').click(function() {
 		funcShowToastr("lpw");
 		var formData = {

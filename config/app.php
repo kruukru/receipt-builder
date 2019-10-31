@@ -226,6 +226,11 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
+        // new libraries
+        'NetworkPrintConnector' => Mike42\Escpos\PrintConnectors\NetworkPrintConnector::class,
+        'Printer' => Mike42\Escpos\Printer::class,
+        'DummyPrintConnector' => Mike42\Escpos\PrintConnectors\DummyPrintConnector::class,
+        'CapabilityProfile' => Mike42\Escpos\CapabilityProfile::class,
     ],
 
 ];

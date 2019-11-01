@@ -28,16 +28,14 @@
 						<td>
 							@if ($account->type == 0) 
 								Super Admin
-							@elseif ($account->type == 1)
-								Admin
 							@else 
-								Normal
+								Default
 							@endif
 						</td>
 						<td class="text-center">
 							<button type="button" class="btn btn-primary" onclick="funcOpenAccountModal('update', this);">Update</button>
 							@if ($account->id != 1)
-								<button type="button" class="btn btn-danger" id="idButtonRemove">Remove</button>
+								<button type="button" class="btn btn-danger" id="idButtonRemove" onclick="funcRemoveAccount(this);">Remove</button>
 							@endif
 						</td>
 					</tr>
@@ -74,8 +72,7 @@
 						<label>Account Type</label>
 						<select class="form-control" id="idSelectType">
 							<option value="0">Super Admin</option>
-							<option value="1">Admin</option>
-							<option value="2">Normal</option>
+							<option value="1">Default</option>
 						</select>
 					</div>
 	      		</div>
@@ -107,11 +104,6 @@
 			} else if (type == "update") {
 				funcShowToastr("lpw");
 				var id = $(thisElement).closest('tr').attr('data-thisid');
-				if (id == 1) {
-					$('#idInputPassword').prop('disabled', true);
-					$('#idInputPassword2').prop('disabled', true);
-					$('#idSelectType').prop('disabled', true);
-				}
 
 				$.ajax({
 					type: "GET",
@@ -123,8 +115,8 @@
 
 						$('#idInputName').val(data.name);
 						$('#idInputUsername').val(data.username);
-						$('#idInputPassword').val("default");
-						$('#idInputPassword2').val("default");
+						$('#idInputPassword').val("");
+						$('#idInputPassword2').val("");
 						$('#idSelectType').val(data.type);
 
 						toastr.remove();
@@ -182,14 +174,64 @@
 				success: function(data) {
 					//console.log(data);
 
-					funcShowToastr("success", "Account Saved!", "Success");
-					$('#idDivModalAccount').modal('hide');
+					if (data.status == "OK") {
+						funcShowToastr("success", "Account Saved!", "Success");
+						$('#idDivModalAccount').modal('hide');
+
+						setTimeout(function() {
+							location.reload();
+						}, 1500);
+					} else {
+						var str = "";
+						$.each(data.data, function(index, value) {
+							str += value+"<br>";
+						});
+						funcShowToastr("error", str, "Error", {
+							escapeHtml: false,
+						});
+					}
 				},
 				error: function(data) {
 					console.log(data);
 
 					funcShowToastr("aueo");
 				},
+			});
+		}
+		function funcRemoveAccount(thisElement) {
+			var id = $(thisElement).closest('tr').attr('data-thisid');
+
+			$.confirm({
+			    title: 'Confirmation!',
+			    content: 'Are you sure you want to remove this?',
+			    buttons: {
+			    	confirm: {
+			    		btnClass: 'btn-red',
+			    		action: function() {
+			    			$.ajax({
+			    				type: "POST",
+			    				url: "{{ route('admin-account-remove') }}",
+			    				data: { _token: "{{ Session::token() }}", id: id, },
+			    				dataType: "JSON",
+			    				success: function(data) {
+			    					funcShowToastr("success", "Account Removed!", "Success");
+
+									setTimeout(function() {
+										location.reload();
+									}, 1500);
+			    				},
+			    				error: function(data) {
+			    					console.log(data);
+
+			    					funcShowToastr("aueo");
+			    				}
+			    			});
+			    		}
+			    	},
+			        cancel: function () {
+			            
+			        },
+			    }
 			});
 		}
 	</script>

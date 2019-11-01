@@ -4,3 +4,5 @@
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('library/css/toastr.min.css') }}">
 <!-- Datatable 1.10.20 -->
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('library/css/datatables.min.css') }}">
+<!-- JQueryConfirm 3.3.4 -->
+<link rel="stylesheet" type="text/css" href="{{ URL::asset('library/css/jquery-confirm.min.css') }}">

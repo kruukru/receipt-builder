@@ -67,7 +67,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Manila',
 
     /*
     |--------------------------------------------------------------------------
@@ -228,9 +228,12 @@ return [
 
         // new libraries
         'NetworkPrintConnector' => Mike42\Escpos\PrintConnectors\NetworkPrintConnector::class,
-        'Printer' => Mike42\Escpos\Printer::class,
         'DummyPrintConnector' => Mike42\Escpos\PrintConnectors\DummyPrintConnector::class,
+        'WindowsPrintConnector' => Mike42\Escpos\PrintConnectors\WindowsPrintConnector::class,
+        'RawbtPrintConnector' => Mike42\Escpos\PrintConnectors\RawbtPrintConnector::class,
         'CapabilityProfile' => Mike42\Escpos\CapabilityProfile::class,
+        'EscposImage' => Mike42\Escpos\EscposImage::class,
+        'Printer' => Mike42\Escpos\Printer::class,
     ],
 
 ];

@@ -6,6 +6,8 @@
 <script type="text/javascript" src="{{ URL::asset('library/js/toastr.min.js') }}"></script>
 <!-- Datatable 1.10.20 -->
 <script type="text/javascript" src="{{ URL::asset('library/js/datatables.min.js') }}"></script>
+<!-- JQueryConfirm 3.3.4 -->
+<script type="text/javascript" src="{{ URL::asset('library/js/jquery-confirm.min.js') }}"></script>
 
 <script type="text/javascript">
 	function funcShowToastr(type, description, title, options) {

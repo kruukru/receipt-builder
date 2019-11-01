@@ -21,6 +21,7 @@ Route::group(['middleware' => ['auth']], function() {
 		Route::name("retrieve-account-one")->get("/retrieve-account-one", "JSONController@getAccountOne");
 
 		Route::name("admin-account")->get("/admin", "AccountController@getAccount");
-		Route::name("admin-account-save")->post("/admin/save", "AccountController@postAccountSave");
+		Route::name("admin-account-save")->post("/admin/save", "AccountController@postSaveAccount");
+		Route::name("admin-account-remove")->post("/admin/remove", "AccountController@postRemoveAccount");
 	});
 });

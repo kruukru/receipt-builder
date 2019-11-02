@@ -189,6 +189,8 @@
 				return;
 			}
 
+			funcShowToastr("lpw");
+			$('#idButtonPrint').prop('disabled', true);
 			var formData = {
 				_token: "{{ Session::token() }}",
 				totalprice: $('#idNumberTotalPrice').val(),
@@ -197,7 +199,6 @@
 				balance: $('#idNumberBalance').val(),
 				arrayorder: arrayOrder,
 			};
-
 			$.ajax({
 				type: "POST",
 				url: "{{ route('print-receipt') }}",
@@ -206,6 +207,7 @@
 				success: function(data) {
 					//console.log(data);
 
+					toastr.remove();
 					$.confirm({
 					    title: 'Confirmation!',
 					    content: 'Are you sure you want to print this?',
@@ -213,18 +215,23 @@
 					    	confirm: {
 					    		btnClass: 'btn-green',
 					    		action: function() {
-					    			console.log("rawbt:base64,"+data.print64);
-					    			//window.location.href="rawbt:base64,"+data.print64;
+					    			// console.log("rawbt:base64,"+data.print64);
+					    			window.location.href="rawbt:base64,"+data.print64;
 					    		}
 					    	},
-					        cancel: function () {
-					            
-					        },
+					    	cancel: {
+
+					    	},
 					    }
 					});
+
+					$('#idButtonPrint').prop('disabled', false);
 				},
 				error: function(data) {
 					console.log(data);
+
+					funcShowToastr("aueo");
+					$('#idButtonPrint').prop('disabled', false);
 				},
 			});
 		});

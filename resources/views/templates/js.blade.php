@@ -8,6 +8,8 @@
 <script type="text/javascript" src="{{ URL::asset('library/js/datatables.min.js') }}"></script>
 <!-- JQueryConfirm 3.3.4 -->
 <script type="text/javascript" src="{{ URL::asset('library/js/jquery-confirm.min.js') }}"></script>
+<!-- Select2 4.0.11 -->
+<script type="text/javascript" src="{{ URL::asset('library/js/select2.min.js') }}"></script>
 
 <script type="text/javascript">
 	function funcShowToastr(type, description, title, options) {
@@ -26,4 +28,8 @@
 			});
 		}
 	}
+	var priceFormatter = new Intl.NumberFormat('en-US', {
+		style: 'currency',
+		currency: 'PHP',
+	});
 </script>

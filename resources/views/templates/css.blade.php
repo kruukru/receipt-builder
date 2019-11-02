@@ -6,3 +6,5 @@
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('library/css/datatables.min.css') }}">
 <!-- JQueryConfirm 3.3.4 -->
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('library/css/jquery-confirm.min.css') }}">
+<!-- Select2 4.0.11 -->
+<link rel="stylesheet" type="text/css" href="{{ URL::asset('library/css/select2.min.css') }}">

@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Validator;
+use Response;
 use App\Account;
 use Auth;
-use Response;
-use Validator;
 
 class AccountController extends Controller
 {

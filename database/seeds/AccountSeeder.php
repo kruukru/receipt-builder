@@ -11,9 +11,12 @@ class AccountSeeder extends Seeder
      */
     public function run()
     {
-        $arrayAccounts = [
-        	['name' => "Jermaine", "username" => "qwe", "password" => bcrypt("qwe"), 'type' => 0],
-        ];
+        $arrayAccounts = [[
+            'name' => "Jermaine", 
+            "username" => "qwe", 
+            "password" => bcrypt("qwe"), 
+            'type' => 0
+        ],];
 
         DB::table('account')->insert($arrayAccounts);
     }

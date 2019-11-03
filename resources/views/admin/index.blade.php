@@ -10,6 +10,9 @@
 		.select2-selection__arrow {
 			height: 37px !important;
 		}
+		.classNumberQuantity, .classNumberPrice, .classNumberTotalPrice {
+			min-width: 101px;
+		}
 	</style>
 @endsection
 @section("content")
@@ -142,6 +145,12 @@
 		$('#idTableOrder tbody').on('click', '.classButtonRemove', function() {
 			$(this).closest('tr').remove();
 		});
+		$('#idTableOrder tbody').on('focus', '.classNumberPrice, .classNumberQuantity, .classNumberTotalPrice', function() {
+			$(this).val("");
+		});
+		$('#idNumberCashTendered').focus(function() {
+			$(this).val("");
+		});
 		$('#idTableOrder tbody').on('keyup', '.classNumberPrice, .classNumberQuantity, .classNumberTotalPrice', function() {
 			if ($(this).hasClass('classNumberTotalPrice')) {
 				funcComputeOverallTotalPrice();
@@ -215,8 +224,10 @@
 					    	confirm: {
 					    		btnClass: 'btn-green',
 					    		action: function() {
-					    			// console.log("rawbt:base64,"+data.print64);
-					    			window.location.href="rawbt:base64,"+data.print64;
+					    			// console.log(data);
+					    			// window.location.href="rawbt:base64,"+data.print64;
+					    			var textEncoded = encodeURI(data.print);
+					    			window.location.href="intent://"+textEncoded+"#Intent;scheme=quickprinter;package=pe.diegoveloper.printerserverapp;end;";
 					    		}
 					    	},
 					    	cancel: {

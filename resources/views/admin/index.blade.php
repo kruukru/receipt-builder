@@ -1,6 +1,9 @@
 @extends("admin.templates.default")
 @section("css")
 	<style type="text/css">
+		.classErrorRedBorder {
+			border: 1px solid red;
+		}
 		.select2-selection__rendered {
 			line-height: 34px !important;
 		}
@@ -13,55 +16,71 @@
 		.classNumberQuantity, .classNumberPrice, .classNumberTotalPrice {
 			min-width: 101px;
 		}
+		#idDivContainerOrder .row {
+			margin-bottom: 15px;
+		}
+		#idDivContainerOrder .row .card-header .row {
+			margin-bottom: 0;
+		}
 	</style>
 @endsection
 @section("content")
 	<div class="row" style="margin: 15px 0px 50px;">
-		<div class="col-sm-10">
+		<div class="col-md-9">
 			<h3>Order</h3>
 		</div>
-		<div class="col-sm-2 text-right">
+		<div class="col-md-3 text-right">
 			<button type="button" class="btn btn-primary btn-block" id="idButtonPrint">Print</button>
 		</div>
 	</div>
-	<div class="row">
-		<div class="col-sm-12">
-			<div class="table-responsive">
-				<table class="table table-bordered table-hover" id="idTableOrder">
-					<thead>
-						<tr>
-							<td>Product</td>
-							<td>Quantity</td>
-							<td>Price</td>
-							<td>Total Price</td>
-							<td class="text-center">Action</td>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>
-								<select class="classSelectProduct"></select>
-							</td>
-							<td>
+	<div id="idDivContainerOrder">
+		<div class="row classDivHeaderRow">
+			<div class="col-md-12">
+				 <div class="card bg-light">
+				 	<div class="card-header">
+				 		<div class="row">
+				 			<div class="col-md-10 classDivHeaderText">
+				 				<span id="idSpanHeaderQuantity">1</span> -
+				 				<span id="idSpanHeaderProduct"></span> -
+				 				<span id="idSpanHeaderPrice"></span>
+				 				<span id="idSpanHeaderTotalPrice" style="float: right; font-weight: bold;"></span>
+				 			</div>
+				 			<div class="col-md-2">
+				 				<button type="button" class="btn btn-danger btn-block classButtonRemove">Remove</button>
+				 			</div>
+				 		</div>
+				 	</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="col-md-2">
+								<label>Quantity</label>
 								<input type="number" class="form-control classNumberQuantity" value="1">
-							</td>
-							<td>
+							</div>
+							<div class="col-md-6">
+								<label>Product</label>
+								<select class="form-control classSelectProduct"></select>
+							</div>
+							<div class="col-md-2">
+								<label>Price</label>
 								<input type="number" class="form-control classNumberPrice">
-							</td>
-							<td>
+							</div>
+							<div class="col-md-2">
+								<label>Total Price</label>
 								<input type="number" class="form-control classNumberTotalPrice">
-							</td>
-							<td class="text-center">
-								<button type="button" class="btn btn-success classButtonAdd">Add</button>
-							</td>
-						</tr>
-					</tbody>
-				</table>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-sm-12 text-right">
+		<div class="col-md-3">
+			<div class="form-group">
+				<button type="button" class="btn btn-success btn-block" id="idButtonAdd">Add</button>
+			</div>
+		</div>
+		<div class="col-md-9 text-right">
 			<div class="form-group">
 				<h4>
 					<span style="font-size: 1rem;">Overall Total Price:</span>
@@ -101,24 +120,45 @@
 			"text": "Select a product",
 		}];
 		var rowHTML = "\
-			<tr>\
-				<td>\
-					<select class='classSelectProduct'></select>\
-				</td>\
-				<td>\
-					<input type='number' class='form-control classNumberQuantity' value='1'>\
-				</td>\
-				<td>\
-					<input type='number' class='form-control classNumberPrice'>\
-				</td>\
-				<td>\
-					<input type='number' class='form-control classNumberTotalPrice'>\
-				</td>\
-				<td class='text-center'>\
-					<button type='button' class='btn btn-success classButtonAdd'>Add</button>\
-					<button type='button' class='btn btn-danger classButtonRemove'>Remove</button>\
-				</td>\
-			</tr>";
+			<div class='row classDivHeaderRow'>\
+				<div class='col-md-12'>\
+					 <div class='card bg-light'>\
+					 	<div class='card-header'>\
+					 		<div class='row'>\
+					 			<div class='col-md-10 classDivHeaderText'>\
+					 				<span id='idSpanHeaderQuantity'>1</span> -\
+					 				<span id='idSpanHeaderProduct'></span> -\
+					 				<span id='idSpanHeaderPrice'></span>\
+					 				<span id='idSpanHeaderTotalPrice' style='float: right; font-weight: bold;'></span>\
+					 			</div>\
+					 			<div class='col-md-2'>\
+					 				<button type='button' class='btn btn-danger btn-block classButtonRemove'>Remove</button>\
+					 			</div>\
+					 		</div>\
+					 	</div>\
+						<div class='card-body'>\
+							<div class='row'>\
+								<div class='col-md-2'>\
+									<label>Quantity</label>\
+									<input type='number' class='form-control classNumberQuantity' value='1'>\
+								</div>\
+								<div class='col-md-6'>\
+									<label>Product</label>\
+									<select class='form-control classSelectProduct'></select>\
+								</div>\
+								<div class='col-md-2'>\
+									<label>Price</label>\
+									<input type='number' class='form-control classNumberPrice'>\
+								</div>\
+								<div class='col-md-2'>\
+									<label>Total Price</label>\
+									<input type='number' class='form-control classNumberTotalPrice'>\
+								</div>\
+							</div>\
+						</div>\
+					</div>\
+				</div>\
+			</div>";
 		$(document).ready(function() {
 			$.each(arrayProduct, function(index, value) {
 				arraySelect2Product.push({
@@ -133,41 +173,70 @@
 				data: arraySelect2Product,
 			});
 		});
+		
+		$('#idDivContainerOrder').on('click', '.classButtonRemove', function() {
+			$(this).closest('.classDivHeaderRow').remove();
+		});
+		$('#idDivContainerOrder').on('focus', '.classNumberPrice, .classNumberQuantity, .classNumberTotalPrice', function() {
+			$(this).removeClass('classErrorRedBorder');
+			$(this).val("");
+		});
+		$('#idDivContainerOrder').on('blur', '.classNumberPrice, .classNumberQuantity, .classNumberTotalPrice', function() {
+			var thisData = parseFloat($(this).val());
+			if (isNaN(thisData)) {
+				$(this).addClass('classErrorRedBorder');
 
-		$('#idTableOrder tbody').on('click', '.classButtonAdd', function() {
-			$('#idTableOrder tbody').append(rowHTML);
+				if ($(this).hasClass('classNumberPrice')) {
+					funcShowToastr("error", "Invalid Price", "Error");
+				} else if ($(this).hasClass('classNumberQuantity')) {
+					funcShowToastr("error", "Invalid Quantity", "Error");
+				} else if ($(this).hasClass('classNumberTotalPrice')) {
+					funcShowToastr("error", "Invalid Total Price", "Error");
+				}
+			}
+		});
+		$('#idNumberCashTendered').focus(function() {
+			$(this).val("");
+		});
+		$('#idDivContainerOrder').on('keyup', '.classNumberPrice, .classNumberQuantity, .classNumberTotalPrice', function() {
+			$thisRow = $(this).closest('.classDivHeaderRow');
+
+			if ($(this).hasClass('classNumberTotalPrice')) {
+				funcComputeOverallTotalPrice();
+			} else {
+				funcComputeTotalPrice($thisRow);
+			}
+			
+			if ($(this).hasClass('classNumberPrice')) {
+				$thisRow.find('.classDivHeaderText #idSpanHeaderPrice').text($(this).val());
+			} else if ($(this).hasClass('classNumberQuantity')) {
+				$thisRow.find('.classDivHeaderText #idSpanHeaderQuantity').text($(this).val());
+			} else if ($(this).hasClass('classNumberTotalPrice')) {
+				$thisRow.find('.classDivHeaderText #idSpanHeaderTotalPrice').text(priceFormatter.format($(this).val()));
+			}
+		});
+		$('#idDivContainerOrder').on('select2:select', '.classSelectProduct', function(e) {
+			var $thisRow = $(this).closest('.classDivHeaderRow');
+
+			$thisRow.find('.classDivHeaderText #idSpanHeaderProduct').text(e.params.data.text);
+			$thisRow.find('.classDivHeaderText #idSpanHeaderPrice').text(e.params.data.price);
+			$thisRow.find('.classNumberPrice').val(e.params.data.price).removeClass('classErrorRedBorder');
+			$thisRow.find('.classNumberTotalPrice').removeClass('classErrorRedBorder');
+
+			funcComputeTotalPrice($thisRow);
+		});
+
+		$('#idButtonAdd').click(function() {
+			$('#idDivContainerOrder').append(rowHTML);
 			$('.classSelectProduct').select2({
 				width: "100%",
 				height: "100px",
 				data: arraySelect2Product,
 			});
 		});
-		$('#idTableOrder tbody').on('click', '.classButtonRemove', function() {
-			$(this).closest('tr').remove();
-		});
-		$('#idTableOrder tbody').on('focus', '.classNumberPrice, .classNumberQuantity, .classNumberTotalPrice', function() {
-			$(this).val("");
-		});
-		$('#idNumberCashTendered').focus(function() {
-			$(this).val("");
-		});
-		$('#idTableOrder tbody').on('keyup', '.classNumberPrice, .classNumberQuantity, .classNumberTotalPrice', function() {
-			if ($(this).hasClass('classNumberTotalPrice')) {
-				funcComputeOverallTotalPrice();
-			} else {
-				funcComputeTotalPrice($(this).closest('tr'));
-			}
-		});
-		$('#idTableOrder tbody').on('select2:select', '.classSelectProduct', function(e) {
-			var $thisTr = $(this).closest('tr');
-			$thisTr.find('.classNumberPrice').val(e.params.data.price);
-			
-			funcComputeTotalPrice($(this).closest('tr'));
-		});
-
 		$('#idButtonPrint').click(function() {
 			var arrayOrder = []; var checker = false;
-			$('#idTableOrder tbody tr').each(function() {
+			$('#idDivContainerOrder .classDivHeaderRow').each(function() {
 				var formData = {
 					id: $(this).find('.classSelectProduct').val(),
 					quantity: $(this).find('.classNumberQuantity').val(),
@@ -178,15 +247,15 @@
 					funcShowToastr("error", "Invalid Product", "Error");
 					checker = true;
 				}
-				if (formData.quantity == "" || formData.quantity == "0") {
+				if (isNaN(parseFloat(formData.quantity))) {
 					checker = true;
 					funcShowToastr("error", "Invalid Quantity", "Error");
 				}
-				if (formData.price == "" || formData.price == "0") {
+				if (isNaN(parseFloat(formData.price))) {
 					checker = true;
 					funcShowToastr("error", "Invalid Price", "Error");
 				}
-				if (formData.totalprice == "" || formData.totalprice == "0") {
+				if (isNaN(parseFloat(formData.totalprice))) {
 					checker = true;
 					funcShowToastr("error", "Invalid Total Price", "Error");
 				}
@@ -256,21 +325,31 @@
 			funcComputeChange();
 		});
 
-		function funcComputeTotalPrice($thisTr) {
-			var price = $thisTr.find('.classNumberPrice').val();
-			var quantity = $thisTr.find('.classNumberQuantity').val();
-			var product = parseFloat(price) * parseFloat(quantity);
-
-			$thisTr.find('.classNumberTotalPrice').val(product.toFixed(2));
+		function funcComputeTotalPrice($thisRow) {
+			var quantity = parseFloat($thisRow.find('.classNumberQuantity').val());
+			if (isNaN(quantity)) {
+				quantity = 0;
+			}
+			var price = parseFloat($thisRow.find('.classNumberPrice').val());
+			if (isNaN(price)) {
+				price = 0;
+			}
+			
+			var product = price * quantity;
+			$thisRow.find('.classNumberTotalPrice').val(product.toFixed(2));
+			$thisRow.find('.classDivHeaderText #idSpanHeaderTotalPrice').text(priceFormatter.format(product));
 
 			funcComputeOverallTotalPrice();
 		}
 		function funcComputeOverallTotalPrice() {
 			var total = 0;
-			$('#idTableOrder tbody tr').each(function() {
-				var price = $(this).find('.classNumberTotalPrice').val();
+			$('#idDivContainerOrder .classDivHeaderRow').each(function() {
+				var totalprice = parseFloat($(this).find('.classNumberTotalPrice').val());
+				if (isNaN(totalprice)) {
+					totalprice = 0;
+				}
 
-				total = parseFloat(total) + parseFloat(price);
+				total = parseFloat(total) + totalprice;
 			});
 			$('#idSpanTotalPrice').text(priceFormatter.format(total));
 			$('#idNumberTotalPrice').val(total);
@@ -284,7 +363,10 @@
 			$('#idNumberChange').val(0);
 
 			var total = $('#idNumberTotalPrice').val();
-			var cash = $('#idNumberCashTendered').val() == "" ? 0 : $('#idNumberCashTendered').val();
+			var cash = parseFloat($('#idNumberCashTendered').val());
+			if (isNaN(cash)) {
+				cash = 0;
+			}
 
 			var change =  parseFloat(cash) - parseFloat(total);
 			if (change < 0) {

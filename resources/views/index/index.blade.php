@@ -2,7 +2,7 @@
 
 @section("content")
 	<div class="row" style="margin-top: 25vh;">
-		<div class="col-sm-4 offset-sm-4">
+		<div class="col-md-4 offset-md-4">
 			<div class="card bg-light">
 				<div class="card-header">
 					Login
@@ -28,13 +28,14 @@
 @section('js')
 <script type="text/javascript">
 	$('#idButtonLogin').click(function() {
+		$('#idButtonLogin').prop('disabled', true);
+
 		funcShowToastr("lpw");
 		var formData = {
 			_token: "{{ Session::token() }}",
 			username: $('#idInputUsername').val(),
 			password: $('#idInputPassword').val(),
 		};
-
 		$.ajax({
 			type: "POST",
 			url: "{{ route('login') }}",
@@ -55,8 +56,16 @@
 			},
 			complete: function(data) {
 				//console.log(data);
+
+				$('#idButtonLogin').prop('disabled', false);
 			},
 		});
+	});
+
+	$('#idInputPassword').keypress(function(e) {
+		if (e.which == 13) {
+			$('#idButtonLogin').trigger('click');
+		}
 	});
 
 	$('#idButtonClear').click(function() {

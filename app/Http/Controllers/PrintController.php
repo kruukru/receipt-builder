@@ -27,7 +27,7 @@ class PrintController extends Controller
             "Change" => $request->change,
             "Balance" => abs($request->balance),
         ));
-        $printString .= "<BR><BR><BR><CUT>";
+        $printString .= "<BR><BR><CUT>";
 
         return Response::json(array(
         	'print' => $printString
@@ -40,7 +40,12 @@ class PrintController extends Controller
         foreach ($arrayOrder as $key => $order) {
         	$productName = Product::findOrFail($order['id']);
 
-            $printString .= "<BOLD><LEFT>".$order['quantity']." - <NORMAL>".$productName->name." (P".number_format($order['price'], 2).")<BR><BOLD><RIGHT>P ".number_format($order['totalprice'], 2)."<NORMAL><BR>";
+            $outPrice = "";
+            if ($order['quantity'] > 1) {
+                $outPrice = "(".number_format($order['price'], 2).")";
+            }
+
+            $printString .= "<BOLD><LEFT>".$order['quantity']." <NORMAL>- ".$productName->name." ".$outPrice."<BR><BOLD><RIGHT>".number_format($order['totalprice'], 2)."<NORMAL><BR>";
         }
 
         return $printString;
@@ -49,7 +54,7 @@ class PrintController extends Controller
         $printString = "";
 
         foreach ($arrayItem as $key => $item) {
-            $printString .= "<BOLD><LEFT>".$key."<BR><BOLD><RIGHT>P ".number_format($item, 2)."<BR>";
+            $printString .= "<BOLD><LEFT>".$key."<BR><BOLD><RIGHT>".number_format($item, 2)."<BR>";
         }
 
         return $printString;

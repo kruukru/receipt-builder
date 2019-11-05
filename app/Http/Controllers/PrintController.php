@@ -18,7 +18,7 @@ use RawbtPrintConnector;
 class PrintController extends Controller
 {
     public function postPrintReceipt(Request $request) {
-        $printString = "<BR><CENTER><BIG>5J Store<BR>1326 Masinop St. Tondo Manila<BR><CENTER>".date("l, M j, Y G:i")."<BR><DLINE0><BR>";
+        $printString = "<BR><CENTER><BIG>5J Store<BR><CENTER>1326 Masinop St. Tondo Manila<BR><CENTER>".date("l, M j, Y G:i")."<BR><DLINE0><BR>";
         $printString .= $this->funcPrintOrder($request->arrayorder);
         $printString .= "<LINE0><BR>";
         $printString .= $this->funcPrintSummary(array(
@@ -54,6 +54,9 @@ class PrintController extends Controller
         $printString = "";
 
         foreach ($arrayItem as $key => $item) {
+            if ($key == "Balance" && $item == 0) {
+                continue;
+            }
             $printString .= "<BOLD><LEFT>".$key."<BR><BOLD><RIGHT>".number_format($item, 2)."<BR>";
         }
 

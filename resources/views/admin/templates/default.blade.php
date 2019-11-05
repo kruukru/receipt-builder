@@ -43,7 +43,7 @@
         <div class="container-fluid">
             @yield("content")
         </div>
-
+        <br><br><br>
         @include("templates.html")
         @include("templates.js")
         @yield("js")

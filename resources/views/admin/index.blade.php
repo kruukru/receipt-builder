@@ -176,6 +176,7 @@
 		
 		$('#idDivContainerOrder').on('click', '.classButtonRemove', function() {
 			$(this).closest('.classDivHeaderRow').remove();
+			funcComputeOverallTotalPrice();
 		});
 		$('#idDivContainerOrder').on('focus', '.classNumberPrice, .classNumberQuantity, .classNumberTotalPrice', function() {
 			$(this).removeClass('classErrorRedBorder');

@@ -23,7 +23,7 @@
 					@foreach ($products as $product)
 					<tr data-thisid="{{$product->id}}">
 						<td>{{$product->name}}</td>
-						<td>P {{number_format($product->price, 2)}}</td>
+						<td>{{number_format($product->price, 2)}}</td>
 						<td class="text-center">
 							<button type="button" class="btn btn-primary" onclick="funcOpenProductModal('update', this);">Update</button>
 							<button type="button" class="btn btn-danger" id="idButtonRemove" onclick="funcRemoveProduct(this);">Remove</button>
@@ -54,7 +54,7 @@
 					</div>
 	      		</div>
 	      		<div class="modal-footer">
-	        		<button type="button" class="btn btn-success" style="width: 100px;" onclick="funcSaveProductModal();">Save</button>
+	        		<button type="button" class="btn btn-success" style="width: 100px;" onclick="funcSaveProductModal();" id="idButtonSave">Save</button>
 	        		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 	      		</div>
 	    	</div>
@@ -63,12 +63,16 @@
 @endsection
 @section('js')
 	<script type="text/javascript">
+		var dataTableProduct;
 		$(document).ready(function() {
-			$('#idTableProduct').DataTable();
+			dataTableProduct = $('#idTableProduct').DataTable();
 		});
 
-		$('#idInputPrice').on('keyup', function() {
+		$('#idInputPrice').keyup(function() {
 			$('#idSpanPrice').text("- "+priceFormatter.format($(this).val()));
+		});
+		$('#idInputPrice').focus(function() {
+			$(this).val("");
 		});
 
 		$('#idDivModalProduct').on('hidden.bs.modal', function() {
@@ -113,6 +117,8 @@
 			$('#idDivModalProduct').modal('show');
 		}
 		function funcSaveProductModal() {
+			$('#idButtonSave').prop('disabled', true);
+
 			funcShowToastr("lpw");
 			var type = $('#idDivModalProduct').attr('data-thisaction');
 			var id = $('#idDivModalProduct').attr('data-thisid');
@@ -140,15 +146,31 @@
 				data: formData,
 				dataType: "JSON",
 				success: function(data) {
-					//console.log(data);
+					console.log(data);
 
 					if (data.status == "OK") {
 						funcShowToastr("success", "Product Saved!", "Success");
 						$('#idDivModalProduct').modal('hide');
 
-						setTimeout(function() {
-							location.reload();
-						}, 1500);
+						if (type == "new") {
+							var row = "\
+								<tr data-thisid='"+data.data.id+"'>\
+									<td>"+data.data.name+"</td>\
+									<td>"+parseFloat(data.data.price).toFixed(2)+"</td>\
+									<td class='text-center'>\
+										<button type='button' class='btn btn-primary' onclick='funcOpenProductModal(\"update\", this);'>Update</button>\
+										<button type='button' class='btn btn-danger' id='idButtonRemove' onclick='funcRemoveProduct(this);'>Remove</button>\
+									</td>\
+								</tr>";
+							dataTableProduct.row.add($(row)[0]).draw(false);
+						} else if (type == "update") {
+							var dt = [
+								data.data.name,
+								parseFloat(data.data.price).toFixed(2),
+								"<button type='button' class='btn btn-primary' onclick='funcOpenProductModal(\"update\", this);'>Update</button> <button type='button' class='btn btn-danger' id='idButtonRemove' onclick='funcRemoveProduct(this);'>Remove</button>",
+							];
+							dataTableProduct.row('[data-thisid="'+data.data.id+'"]').data(dt).draw(false);
+						}
 					} else {
 						var str = "";
 						$.each(data.data, function(index, value) {
@@ -163,6 +185,11 @@
 					console.log(data);
 
 					funcShowToastr("aueo");
+				},
+				complete: function(data) {
+					// console.log(data);
+
+					$('#idButtonSave').prop('disabled', false);
 				},
 			});
 		}
@@ -184,9 +211,7 @@
 			    				success: function(data) {
 			    					funcShowToastr("success", "Product Removed!", "Success");
 
-									setTimeout(function() {
-										location.reload();
-									}, 1500);
+									dataTableProduct.row('[data-thisid="'+id+'"]').remove().draw(false);
 			    				},
 			    				error: function(data) {
 			    					console.log(data);

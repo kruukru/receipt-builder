@@ -163,7 +163,7 @@
 			$.each(arrayProduct, function(index, value) {
 				arraySelect2Product.push({
 					"id": value.id,
-					"text": value.name,
+					"text": value.name+" (PHP "+parseFloat(value.price).toFixed(2)+")",
 					"price": value.price,
 				});
 			});

@@ -38,14 +38,20 @@ class PrintController extends Controller
         $printString = "";
 
         foreach ($arrayOrder as $key => $order) {
-        	$productName = Product::findOrFail($order['id']);
-
+            $productName = ""; $arrayOrderID = explode("-", $order['id']);
+            if (count($arrayOrderID) == 1) {
+                $product = Product::findOrFail($order['id']);
+                $productName = $product->name;
+            } else {
+                $productName = $arrayOrderID[1];
+            }
+            
             $outPrice = "";
             if ($order['quantity'] > 1) {
-                $outPrice = "(".number_format($order['price'], 2).")";
+                $outPrice = " (".number_format($order['price'], 2).")";
             }
 
-            $printString .= "<BOLD><LEFT>".$order['quantity']." <NORMAL>- ".$productName->name." ".$outPrice."<BR><BOLD><RIGHT>".number_format($order['totalprice'], 2)."<NORMAL><BR>";
+            $printString .= "<BOLD><LEFT>".$order['quantity']." <NORMAL>- ".$productName.$outPrice."<BR><BOLD><RIGHT>".number_format($order['totalprice'], 2)."<NORMAL><BR>";
         }
 
         return $printString;

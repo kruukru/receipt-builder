@@ -171,6 +171,14 @@
 				width: "100%",
 				height: "100px",
 				data: arraySelect2Product,
+				tags: true,
+				createTag: function(params) {
+					return {
+						id: "new-"+params.term,
+					    text: params.term,
+					    newOption: true,
+					};
+				}
 			});
 		});
 		

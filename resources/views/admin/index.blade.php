@@ -25,15 +25,18 @@
 </style>
 @endsection
 @section("content")
-<div class="row" style="margin: 15px 0px 50px;">
-	<div class="col-md-6">
+<div class="row" style="margin: 15px 0px 30px;">
+	<div class="col-md-3">
 		<h3>Order</h3>
 	</div>
 	<div class="col-md-3">
-		<button type="button" class="btn btn-success btn-block" onclick="funcOpenProductModal('new');">New Product</button>
+		<button type="button" class="btn btn-success btn-block" onclick="funcOpenProductModal('new');" style="margin-bottom: 15px;">New Product</button>
 	</div>
 	<div class="col-md-3">
-		<button type="button" class="btn btn-primary btn-block" id="idButtonViewReceipt">Receipt Preview</button>
+		<button type="button" class="btn btn-primary btn-block" id="idButtonViewReceipt" style="margin-bottom: 15px;">Receipt Preview</button>
+	</div>
+	<div class="col-md-3">
+		<button type="button" class="btn btn-success btn-block" id="idButtonAddProduct">Add Product</button>
 	</div>
 </div>
 <div id="idDivContainerOrder">
@@ -78,12 +81,7 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-md-3">
-		<div class="form-group">
-			<button type="button" class="btn btn-success btn-block" id="idButtonAddProduct">Add Product</button>
-		</div>
-	</div>
-	<div class="col-md-9 text-right">
+	<div class="col-md-12 text-right">
 		<div class="form-group">
 			<h4>
 				<span style="font-size: 1rem;">Overall Total Price:</span>
@@ -254,6 +252,17 @@ $('#idDivContainerOrder').on('keyup', '.classNumberPrice, .classNumberQuantity, 
 	$thisRow = $(this).closest('.classDivHeaderRow');
 
 	if ($(this).hasClass('classNumberTotalPrice')) {
+		var quantity = parseFloat($thisRow.find('.classNumberQuantity').val());
+		if (isNaN(quantity)) {
+			quantity = 0;
+		}
+		var totalprice = parseFloat($(this).val());
+		if (isNaN(totalprice)) {
+			totalprice = 0;
+		}
+
+		$thisRow.find('.classNumberPrice').val(totalprice / quantity);
+
 		funcComputeOverallTotalPrice();
 	} else {
 		funcComputeTotalPrice($thisRow);
@@ -279,11 +288,19 @@ $('#idDivContainerOrder').on('select2:select', '.classSelectProduct', function(e
 });
 
 $('#idButtonAddProduct').click(function() {
-	$('#idDivContainerOrder').append(rowHTML);
+	$('#idDivContainerOrder').prepend(rowHTML);
 	$('.classSelectProduct').select2({
 		width: "100%",
 		height: "100px",
 		data: arraySelect2Product,
+		tags: true,
+		createTag: function(params) {
+			return {
+				id: "new-"+params.term,
+			    text: params.term,
+			    newOption: true,
+			};
+		}
 	});
 });
 $('#idButtonViewReceipt').click(function() {

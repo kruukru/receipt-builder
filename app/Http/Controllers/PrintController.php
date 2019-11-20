@@ -48,10 +48,36 @@ class PrintController extends Controller
             
             $outPrice = "";
             if ($order['quantity'] > 1) {
-                $outPrice = " (".number_format($order['price'], 2).")";
+                $outPrice = "    (".number_format($order['price'], 2).")<BR>";
             }
 
-            $printString .= "<BOLD><LEFT>".$order['quantity']." <NORMAL>- ".$productName.$outPrice."<BR><BOLD><RIGHT>".number_format($order['totalprice'], 2)."<NORMAL><BR>";
+            $outQuantity = $order['quantity']; 
+            $orderQuantityLength = strlen($outQuantity);
+            if ($orderQuantityLength < 2) {
+                for ($x=$orderQuantityLength; $x<2; $x++) { 
+                    $outQuantity .= " ";
+                }
+            }
+
+            $outProductName = $productName;
+            $productNameLength = strlen($outProductName);
+            if ($productNameLength < 19) {
+                for ($x=$productNameLength; $x<19; $x++) { 
+                    $outProductName .= " ";
+                }
+            }
+
+            $outTotalPrice = number_format($order['totalprice'], 2);
+            $totalPriceLength = strlen($outTotalPrice);
+            if ($totalPriceLength < 9) {
+                $space = "";
+                for ($x=$totalPriceLength; $x<9; $x++) { 
+                    $space .= " ";
+                }
+                $outTotalPrice = $space.$outTotalPrice;
+            }
+
+            $printString .= "<LEFT><BOLD>".$outQuantity." <NORMAL>".$outProductName." <BOLD>".$outTotalPrice."<BR>".$outPrice;
         }
 
         return $printString;
@@ -63,7 +89,16 @@ class PrintController extends Controller
             if ($key == "Balance" && $item == 0) {
                 continue;
             }
-            $printString .= "<BOLD><LEFT>".$key."<BR><BOLD><RIGHT>".number_format($item, 2)."<BR>";
+
+            $keyLength = strlen($key);
+            $itemLength = strlen(number_format($item, 2));
+            $totalLength = $keyLength + $itemLength;
+            $space = "";
+            for ($x=$totalLength; $x<31; $x++) { 
+                $space .= " ";
+            }
+
+            $printString .= "<LEFT><BOLD>".$key." ".$space.number_format($item, 2)."<BR>";
         }
 
         return $printString;

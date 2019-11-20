@@ -3,7 +3,7 @@
 @section("content")
 <div class="row" style="margin: 15px 0px 50px;">
 	<div class="col-sm-8">
-		<h3>Product</h3>
+		<h3>Product (2-19-9)</h3>
 	</div>
 	<div class="col-sm-4 text-right">
 		<button type="button" class="btn btn-success" style="width: 100px;" onclick="funcOpenProductModal('new');">New</button>
@@ -22,7 +22,7 @@
 			<tbody>
 				@foreach ($products as $product)
 				<tr data-thisid="{{$product->id}}">
-					<td>{{$product->name}}</td>
+					<td>{{$product->name}} ({{strlen($product->name)}})</td>
 					<td>{{number_format($product->price, 2)}}</td>
 					<td class="text-center">
 						<button type="button" class="btn btn-primary" onclick="funcOpenProductModal('update', this);">Update</button>
